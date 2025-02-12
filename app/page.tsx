@@ -70,9 +70,14 @@ export default function Home() {
           <FlagPicker flags={flags} disabled={pending} guessedFlags={guessedFlags} onGuess={guess}/>
           <FlagList flags={flags} guessedFlags={guessedFlags}/>
         </div>
-        <div id="right_pane" className="bg-cyan-400">
+        <div id="right_pane" className="bg-slate-800 rounded-md">
             
         </div>
+      </div>
+
+      <div className="absolute inset-x-0 bottom-0 h-16 ml-4 mr-4">
+        How to play: I will pick a random flag. Try to guess the flag I selected. Each time you guess, I will tell you which features
+        of that flag are the same, or different, from the flag I selected.<br />Try to guess as quick as possible!
       </div>
     </div>
   );
@@ -89,7 +94,7 @@ function FlagPicker({ flags, disabled, guessedFlags, onGuess } : FlagPickerProps
 
   const countriesList = flags
     .sort(sortBy(a => a.name))
-    .map(country => <option key={country.code} value={country.code} disabled={guessedFlags.some(guess => guess.code == choice)}>
+    .map(country => <option key={country.code} value={country.code} disabled={guessedFlags.some(guess => guess.code == country.code)}>
       {country.emoji} {country.name}
       </option>
     );
@@ -128,9 +133,10 @@ function FlagList ( {flags, guessedFlags} : FlagListProps) {
         flag: flags.find(flag => guess.code == flag.code) 
       }
     })
-    .map(({result, flag}, index) => <div className="rounded-md px-4 py-2 text-sm font-semibold opacity-100 ml-6 bg-slate-800 guess" key={flag.code}>
+    .filter(({flag}) => !!flag)
+    .map(({result, flag}, index) => <div className="rounded-md px-4 py-2 text-sm font-semibold opacity-100 ml-6 bg-slate-800 guess" key={flag!.code}>
       <span className="mr-4">Guess {index + 1} &gt;</span>
-      { flag?.emoji } { flag?.name }
+      { flag!.emoji } { flag!.name }
       <span className="float-right">{ result.distance } miles</span>
     </div>);
 
