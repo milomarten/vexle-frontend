@@ -1,101 +1,142 @@
-import Image from "next/image";
+"use client"; // This is a client component 👈🏽
+
+import { useEffect, useState } from "react";
+
+interface FlagDefinition {
+  code: string,
+  name: string,
+  emoji: string
+}
+
+const ERROR_FLAG_DEFINITION: FlagDefinition = {
+  code: "XX",
+  name: "Unable to Load",
+  emoji: ""
+}
+
+interface IndividualGuessResult {
+  code: string,
+  distance: number
+}
+
+function sortBy<T, U>(func: (arg0: T) => U): (arg0: T, arg1: T) => number {
+  return (arg0: T, arg1: T) => {
+    const a = func(arg0);
+    const b = func(arg1);
+    if (a < b) { return -1; }
+    else if (a > b) { return 1; }
+    else { return 0; }
+  }
+}
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [flags, setFlags] = useState<FlagDefinition[]>([]);
+  const [guessedFlags, setGuessedFlags] = useState<IndividualGuessResult[]>([]);
+  const [chosenFlag, setChosenFlag] = useState<string>();
+  const [pending, setPending] = useState(false);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
+  useEffect(() => {
+    setPending(true);
+    fetch("http://localhost:8080/vexle/flags")
+      .then(res => res.json())
+      .then(data => {
+        setFlags(data);
+
+        var randomIdx = Math.floor(Math.random() * data.length);
+        setChosenFlag(data[randomIdx].code);
+      })
+      .catch(() => {
+        setFlags([ERROR_FLAG_DEFINITION])
+      })
+      .finally(() => {
+        setPending(false);
+      })
+  }, []); //Run once and only once!
+
+  const guess = function(code: string) {
+    // setPending(true);
+    setGuessedFlags([...guessedFlags, {code, distance: 1000}])
+  }
+  
+  return (
+    <div className="font-[family-name:var(--font-geist-sans)]">
+      <main className="grid grid-rows-auto items-center justify-items-center mb-6">
+        <h1 className="text-[64px]">Vexle</h1>
+        <span>Yet another Flag Guessing game</span>
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+  
+      <div className="grid grid-cols-2 gap-4">
+        <div id="left_pane" className="grid grid-cols-1 gap-4">
+          <FlagPicker flags={flags} disabled={pending} guessedFlags={guessedFlags} onGuess={guess}/>
+          <FlagList flags={flags} guessedFlags={guessedFlags}/>
+        </div>
+        <div id="right_pane" className="bg-cyan-400">
+            
+        </div>
+      </div>
     </div>
   );
+}
+
+type FlagPickerProps = {
+  flags: FlagDefinition[],
+  disabled: boolean,
+  guessedFlags: IndividualGuessResult[],
+  onGuess: (arg0: string) => void
+}
+function FlagPicker({ flags, disabled, guessedFlags, onGuess } : FlagPickerProps) {
+  const [choice, setChoice] = useState<string>(flags.length == 0 ? "XX" : flags[0].code);
+
+  const countriesList = flags
+    .sort(sortBy(a => a.name))
+    .map(country => <option key={country.code} value={country.code} disabled={guessedFlags.some(guess => guess.code == choice)}>
+      {country.emoji} {country.name}
+      </option>
+    );
+  
+  return (
+    <div>
+      <select 
+        id="flags-to-guess" 
+        className="rounded-md px-4 py-2 text-sm font-semibold opacity-100 ml-6" 
+        disabled={flags.length == 0 || flags[0].code == "XX" || disabled}
+        value={choice}
+        onChange={e => setChoice(e.target.value)}
+        >
+          { countriesList }
+      </select>
+      <button 
+        className="rounded-md bg-cyan-500 px-4 py-2 text-sm font-semibold opacity-100 ml-6 disabled:bg-slate-500/80" 
+        onClick={() => onGuess(choice)} 
+        disabled={flags.length == 0 || flags[0].code == "XX" || disabled || guessedFlags.some(guess => guess.code == choice)}
+        >
+          Guess!
+      </button>
+    </div>
+  )
+}
+
+type FlagListProps = {
+  flags: FlagDefinition[]
+  guessedFlags: IndividualGuessResult[]
+}
+function FlagList ( {flags, guessedFlags} : FlagListProps) {
+  const guessedCountriesList = guessedFlags
+    .map(guess => { 
+      return {
+        result: guess, 
+        flag: flags.find(flag => guess.code == flag.code) 
+      }
+    })
+    .map(({result, flag}, index) => <div className="rounded-md px-4 py-2 text-sm font-semibold opacity-100 ml-6 bg-slate-800 guess" key={flag.code}>
+      <span className="mr-4">Guess {index + 1} &gt;</span>
+      { flag?.emoji } { flag?.name }
+      <span className="float-right">{ result.distance } miles</span>
+    </div>);
+
+  return (
+    <div className="grid grid-cols-1 gap-2"> 
+      { guessedCountriesList} 
+    </div>
+  )
 }
