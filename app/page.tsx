@@ -1,23 +1,7 @@
 "use client"; // This is a client component 👈🏽
 
-import { useEffect, useState } from "react";
-
-interface FlagDefinition {
-  code: string,
-  name: string,
-  emoji: string
-}
-
-const ERROR_FLAG_DEFINITION: FlagDefinition = {
-  code: "XX",
-  name: "Unable to Load",
-  emoji: ""
-}
-
-interface IndividualGuessResult {
-  code: string,
-  distance: number
-}
+import { useEffect, useRef, useState } from "react";
+import { DEFAULT_FLAG_RESPONSE, ERROR_FLAG_DEFINITION, FlagDefinition, FlagResponse, GameStatus, IndividualGuessResult } from "./models";
 
 function sortBy<T, U>(func: (arg0: T) => U): (arg0: T, arg1: T) => number {
   return (arg0: T, arg1: T) => {
@@ -31,9 +15,11 @@ function sortBy<T, U>(func: (arg0: T) => U): (arg0: T, arg1: T) => number {
 
 export default function Home() {
   const [flags, setFlags] = useState<FlagDefinition[]>([]);
-  const [guessedFlags, setGuessedFlags] = useState<IndividualGuessResult[]>([]);
-  const [chosenFlag, setChosenFlag] = useState<string>();
+  const [results, setResults] = useState<FlagResponse>(DEFAULT_FLAG_RESPONSE);
   const [pending, setPending] = useState(false);
+
+  const chosenFlag = useRef("XX");
+  const dateOfStart = useRef(new Date().toISOString().split("T")[0]);
 
   useEffect(() => {
     setPending(true);
@@ -43,7 +29,7 @@ export default function Home() {
         setFlags(data);
 
         var randomIdx = Math.floor(Math.random() * data.length);
-        setChosenFlag(data[randomIdx].code);
+        chosenFlag.current = data[randomIdx].code;
       })
       .catch(() => {
         setFlags([ERROR_FLAG_DEFINITION])
@@ -53,11 +39,49 @@ export default function Home() {
       })
   }, []); //Run once and only once!
 
+  useEffect(() => {
+    console.log(results);
+  }, [results])
+
   const guess = function(code: string) {
-    // setPending(true);
-    setGuessedFlags([...guessedFlags, {code, distance: 1000}])
+    setPending(true);
+    fetch("http://localhost:8080/vexle/guess", {
+      method: "POST",
+      body: JSON.stringify({
+        hardCodedAnswer: chosenFlag.current,
+        date: dateOfStart.current,
+        guesses: [...results.individualFlagResults.map(i => i.code), code]
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+    .then(data => data.json())
+    .then(results => {
+      setResults(results);
+    })
+    .finally(() => {
+      setPending(false);
+    })
+  }
+
+  const reset = function() {
+    var randomIdx = Math.floor(Math.random() * flags.length);
+    chosenFlag.current = flags[randomIdx].code;
+    setResults(DEFAULT_FLAG_RESPONSE);
   }
   
+  const flagLoading = flags.length ? 
+    <FlagPicker 
+      flags={flags} 
+      disabled={pending} 
+      gameStatus={results.status} 
+      guessedFlags={results.individualFlagResults} 
+      onGuess={guess}
+      onReset={reset}
+    /> :
+    <div>Loading...</div>
+
   return (
     <div className="font-[family-name:var(--font-geist-sans)]">
       <main className="grid grid-rows-auto items-center justify-items-center mb-6">
@@ -67,8 +91,8 @@ export default function Home() {
   
       <div className="grid grid-cols-2 gap-4">
         <div id="left_pane" className="grid grid-cols-1 gap-4">
-          <FlagPicker flags={flags} disabled={pending} guessedFlags={guessedFlags} onGuess={guess}/>
-          <FlagList flags={flags} guessedFlags={guessedFlags}/>
+          { flagLoading }
+          <FlagList flags={flags} guessedFlags={results.individualFlagResults}/>
         </div>
         <div id="right_pane" className="bg-slate-800 rounded-md">
             
@@ -83,22 +107,37 @@ export default function Home() {
   );
 }
 
+const BUTTON_TEXT: Record<GameStatus, string> = {
+  PLAYING: "Guess!",
+  WON: "Good Job!!",
+  LOST: "Sorry..."
+}
+
 type FlagPickerProps = {
   flags: FlagDefinition[],
   disabled: boolean,
   guessedFlags: IndividualGuessResult[],
+  gameStatus: GameStatus,
   onGuess: (arg0: string) => void
+  onReset: () => void
 }
-function FlagPicker({ flags, disabled, guessedFlags, onGuess } : FlagPickerProps) {
+function FlagPicker({ flags, disabled, guessedFlags, gameStatus, onGuess, onReset } : FlagPickerProps) {
   const [choice, setChoice] = useState<string>(flags.length == 0 ? "XX" : flags[0].code);
 
   const countriesList = flags
     .sort(sortBy(a => a.name))
-    .map(country => <option key={country.code} value={country.code} disabled={guessedFlags.some(guess => guess.code == country.code)}>
+    .map(country => <option key={country.code} value={country.code} disabled={gameStatus != "PLAYING" || guessedFlags.some(guess => guess.code == country.code)}>
       {country.emoji} {country.name}
       </option>
     );
   
+  const resetButton = gameStatus == "PLAYING" ? <></> :
+  <button 
+    className="rounded-md bg-cyan-500 px-4 py-2 text-sm font-semibold opacity-100 ml-6 disabled:bg-slate-500/80" 
+    onClick={() => onReset()}>
+      Play Again!
+  </button>
+
   return (
     <div>
       <select 
@@ -115,8 +154,9 @@ function FlagPicker({ flags, disabled, guessedFlags, onGuess } : FlagPickerProps
         onClick={() => onGuess(choice)} 
         disabled={flags.length == 0 || flags[0].code == "XX" || disabled || guessedFlags.some(guess => guess.code == choice)}
         >
-          Guess!
+          { BUTTON_TEXT[gameStatus] }
       </button>
+      { resetButton }
     </div>
   )
 }
@@ -134,11 +174,15 @@ function FlagList ( {flags, guessedFlags} : FlagListProps) {
       }
     })
     .filter(({flag}) => !!flag)
-    .map(({result, flag}, index) => <div className="rounded-md px-4 py-2 text-sm font-semibold opacity-100 ml-6 bg-slate-800 guess" key={flag!.code}>
-      <span className="mr-4">Guess {index + 1} &gt;</span>
-      { flag!.emoji } { flag!.name }
-      <span className="float-right">{ result.distance } miles</span>
-    </div>);
+    .map(({result, flag}, index) => {
+      const distanceText = result.distance === null ? <></> : <span className="float-right">{ result.distance } miles</span>;
+
+      return <div className="rounded-md px-4 py-2 text-sm font-semibold opacity-100 ml-6 bg-slate-800 guess" key={flag!.code}>
+        <span className="mr-4">Guess {index + 1} &gt;</span>
+        { flag!.emoji } { flag!.name }
+        { distanceText }
+      </div>
+    });
 
   return (
     <div className="grid grid-cols-1 gap-2"> 
