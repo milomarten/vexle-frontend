@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { DEFAULT_FLAG_RESPONSE, ERROR_FLAG_DEFINITION, FlagDefinition, FlagResponse, GameStatus, IndividualGuessResult } from "./models";
+import ComparisonPane from "./comparison-display";
 
 function sortBy<T, U>(func: (arg0: T) => U): (arg0: T, arg1: T) => number {
   return (arg0: T, arg1: T) => {
@@ -95,7 +96,7 @@ export default function Home() {
           <FlagList flags={flags} guessedFlags={results.individualFlagResults}/>
         </div>
         <div id="right_pane" className="bg-slate-800 rounded-md">
-            
+          <ComparisonPane comparison={results.comparison}/>
         </div>
       </div>
 
@@ -133,16 +134,16 @@ function FlagPicker({ flags, disabled, guessedFlags, gameStatus, onGuess, onRese
   
   const resetButton = gameStatus == "PLAYING" ? <></> :
   <button 
-    className="rounded-md bg-cyan-500 px-4 py-2 text-sm font-semibold opacity-100 ml-6 disabled:bg-slate-500/80" 
+    className="rounded-md bg-emerald-500 px-4 py-2 text-sm font-semibold opacity-100 disabled:bg-slate-500/80 flex-none" 
     onClick={() => onReset()}>
       Play Again!
   </button>
 
   return (
-    <div>
+    <div className="flex gap-2">
       <select 
         id="flags-to-guess" 
-        className="rounded-md px-4 py-2 text-sm font-semibold opacity-100 ml-6" 
+        className="rounded-md px-4 py-2 text-sm font-semibold opacity-100 ml-6 flex-auto" 
         disabled={flags.length == 0 || flags[0].code == "XX" || disabled}
         value={choice}
         onChange={e => setChoice(e.target.value)}
@@ -150,7 +151,7 @@ function FlagPicker({ flags, disabled, guessedFlags, gameStatus, onGuess, onRese
           { countriesList }
       </select>
       <button 
-        className="rounded-md bg-cyan-500 px-4 py-2 text-sm font-semibold opacity-100 ml-6 disabled:bg-slate-500/80" 
+        className="rounded-md bg-emerald-500 px-4 py-2 text-sm font-semibold opacity-100 disabled:bg-slate-500/80 flex-none" 
         onClick={() => onGuess(choice)} 
         disabled={flags.length == 0 || flags[0].code == "XX" || disabled || guessedFlags.some(guess => guess.code == choice)}
         >
