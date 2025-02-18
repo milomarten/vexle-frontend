@@ -1,0 +1,9 @@
+<svg width="400" height="400" xmlns="http://www.w3.org/2000/svg">
+ <g id="Layer_1">
+  <title>Layer 1</title>
+  <rect fill="#ffffff" stroke="#000000" x="25" y="80" width="350" height="240" id="svg_3" stroke-width="32" rx="8"/>
+  <path transform="rotate(90, 196.295, 200)" id="svg_7" d="m89.79533,367.18752l106.5,-334.37502l106.5,334.37502l-213,0z" stroke-width="16" stroke="#000000" fill="#ffffff"/>
+  <path transform="rotate(90, 125.295, 200)" id="svg_6" d="m18.795,293.18751l106.5,-186.37502l106.5,186.37502l-213,0z" stroke-width="16" stroke="#000000" fill="#ffffff"/>
+ </g>
+
+</svg>

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { DEFAULT_FLAG_RESPONSE, ERROR_FLAG_DEFINITION, FlagDefinition, FlagResponse, GameStatus, IndividualGuessResult } from "./models";
 import ComparisonPane from "./comparison-display";
+import Confetti from 'react-confetti'
 
 function sortBy<T, U>(func: (arg0: T) => U): (arg0: T, arg1: T) => number {
   return (arg0: T, arg1: T) => {
@@ -83,8 +84,19 @@ export default function Home() {
     /> :
     <div>Loading...</div>
 
+  const confetti = results.status == "WON" ? <Confetti /> : <></>;
+  const comparisonPane = results.individualFlagResults.length ?
+    <ComparisonPane comparison={results.comparison}/> :
+    <div>&lt;-- Make a guess to get started!</div>
+  const answerPane = results.answer ? 
+    <div className="rounded-md px-4 py-2 text-sm font-semibold opacity-100 bg-fuchsia-800 guess">
+        Bad luck! The answer was {results.answer.emoji} {results.answer.name}
+    </div> :
+    <></>;
+
   return (
-    <div className="font-[family-name:var(--font-geist-sans)]">
+    <div className="font-[family-name:var(--font-geist-sans)] ml-4 mr-4">
+      { confetti }
       <main className="grid grid-rows-auto items-center justify-items-center mb-6">
         <h1 className="text-[64px]">Vexle</h1>
         <span>Yet another Flag Guessing game</span>
@@ -94,13 +106,14 @@ export default function Home() {
         <div id="left_pane" className="grid grid-cols-1 gap-4">
           { flagLoading }
           <FlagList flags={flags} guessedFlags={results.individualFlagResults}/>
+          { answerPane }
         </div>
         <div id="right_pane" className="bg-slate-800 rounded-md">
-          <ComparisonPane comparison={results.comparison}/>
+          { comparisonPane }
         </div>
       </div>
 
-      <div className="absolute inset-x-0 bottom-0 h-16 ml-4 mr-4">
+      <div className="absolute inset-x-0 bottom-0 h-20 p-4 bg-black outline-solid outline-white">
         How to play: I will pick a random flag. Try to guess the flag I selected. Each time you guess, I will tell you which features
         of that flag are the same, or different, from the flag I selected.<br />Try to guess as quick as possible!
       </div>
@@ -143,7 +156,7 @@ function FlagPicker({ flags, disabled, guessedFlags, gameStatus, onGuess, onRese
     <div className="flex gap-2">
       <select 
         id="flags-to-guess" 
-        className="rounded-md px-4 py-2 text-sm font-semibold opacity-100 ml-6 flex-auto" 
+        className="rounded-md px-4 py-2 text-sm font-semibold opacity-100 flex-auto" 
         disabled={flags.length == 0 || flags[0].code == "XX" || disabled}
         value={choice}
         onChange={e => setChoice(e.target.value)}
@@ -168,19 +181,12 @@ type FlagListProps = {
 }
 function FlagList ( {flags, guessedFlags} : FlagListProps) {
   const guessedCountriesList = guessedFlags
-    .map(guess => { 
-      return {
-        result: guess, 
-        flag: flags.find(flag => guess.code == flag.code) 
-      }
-    })
-    .filter(({flag}) => !!flag)
-    .map(({result, flag}, index) => {
-      const distanceText = result.distance === null ? <></> : <span className="float-right">{ result.distance } miles</span>;
+    .map((guess, index) => {
+      const distanceText = guess.distance === null ? <></> : <span className="float-right">{ guess.distance } miles</span>;
 
-      return <div className="rounded-md px-4 py-2 text-sm font-semibold opacity-100 ml-6 bg-slate-800 guess" key={flag!.code}>
+      return <div className="rounded-md px-4 py-2 text-sm font-semibold opacity-100 bg-slate-800 guess" key={guess.code}>
         <span className="mr-4">Guess {index + 1} &gt;</span>
-        { flag!.emoji } { flag!.name }
+        { guess.emoji } { guess.name }
         { distanceText }
       </div>
     });

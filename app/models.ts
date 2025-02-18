@@ -21,7 +21,8 @@ export const DEFAULT_FLAG_RESPONSE: FlagResponse = {
         charges: {},
         foundAllCharges: false,
         foundAll: false
-    }
+    },
+    answer: undefined
 }
 
 export type GameStatus = "PLAYING" | "WON" | "LOST";
@@ -29,7 +30,8 @@ export type GameStatus = "PLAYING" | "WON" | "LOST";
 export interface FlagResponse {
     individualFlagResults: IndividualGuessResult[],
     comparison: FlagComparison,
-    status: GameStatus
+    status: GameStatus,
+    answer: FlagDefinition | null | undefined;
 }
 
 export interface IndividualGuessResult {
