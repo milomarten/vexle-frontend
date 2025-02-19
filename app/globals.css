@@ -25,3 +25,7 @@ body {
 select {
   background: var(--midground);
 }
+
+.outline-solid-fixed {
+  outline-style: solid;
+}
