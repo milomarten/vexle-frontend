@@ -1,5 +1,6 @@
 import { JSX } from "react"
 import { FlagComparison, FlagComparisonResult } from "./models"
+import Image from 'next/image'
 
 export type ComparisonPaneProps = {
     comparison: FlagComparison
@@ -37,10 +38,10 @@ const ColorMapper: Record<string, string[]> = {
     "GRAY": ["bg-slate-800", "Gray"],
 }
 function computeColors(colors: Record<string, boolean>): JSX.Element[] {
-    let list = [];
-    for (var color in colors) {
-        var isPresent = colors[color];
-        var colorMapping = ColorMapper[color];
+    const list = [];
+    for (const color in colors) {
+        const isPresent = colors[color];
+        const colorMapping = ColorMapper[color];
         if (isPresent) {
             list.push(<span key={color} className={CIRCLE + " outline-green-500 " + colorMapping[0]} title={colorMapping[1] + " is present"}></span>)
         } else {
@@ -69,18 +70,18 @@ const PatternMapper: Record<string, string> = {
     CHEVRON: "Chevron, Pall, or Arrowhead"
 }
 function computePatterns(patterns: Record<string, FlagComparisonResult>): JSX.Element[] {
-    let list = [];
-    for (var pattern in patterns) {
-        var result = patterns[pattern];
-        var filename = "/patterns/" + pattern.toLowerCase() + ".svg";
-        var verbiage = PatternMapper[pattern];
+    const list = [];
+    for (const pattern in patterns) {
+        const result = patterns[pattern];
+        const filename = "/patterns/" + pattern.toLowerCase() + ".svg";
+        const verbiage = PatternMapper[pattern];
 
-        for (var ctr = 0; ctr < result.present; ctr++) {
+        for (let ctr = 0; ctr < result.present; ctr++) {
             const outlineColor = result.foundAll ? "outline-green-500" : "outline-amber-500"
-            list.push(<img key={pattern + "-good-" + ctr} className={PATTERN + " " + outlineColor} src={filename} width={32} height={32} title={verbiage + " is present"}></img>)
+            list.push(<Image key={pattern + "-good-" + ctr} className={PATTERN + " " + outlineColor} src={filename} width={32} height={32} title={verbiage + " is present"} alt={verbiage + " is present"}></Image>)
         }
-        for (var ctr = 0; ctr < result.absent; ctr++) {
-            list.push(<img key={pattern + "-bad-" + ctr} className={PATTERN + " outline-red-500"} src={filename} width={32} height={32} title={verbiage + " is not present"}></img>)
+        for (let ctr = 0; ctr < result.absent; ctr++) {
+            list.push(<Image key={pattern + "-bad-" + ctr} className={PATTERN + " outline-red-500"} src={filename} width={32} height={32} title={verbiage + " is not present"} alt={verbiage + " is not present"}></Image>)
         }
     }
 

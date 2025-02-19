@@ -30,7 +30,7 @@ export default function Home() {
       .then(data => {
         setFlags(data);
 
-        var randomIdx = Math.floor(Math.random() * data.length);
+        const randomIdx = Math.floor(Math.random() * data.length);
         chosenFlag.current = data[randomIdx].code;
       })
       .catch(() => {
@@ -68,7 +68,7 @@ export default function Home() {
   }
 
   const reset = function() {
-    var randomIdx = Math.floor(Math.random() * flags.length);
+    const randomIdx = Math.floor(Math.random() * flags.length);
     chosenFlag.current = flags[randomIdx].code;
     setResults(DEFAULT_FLAG_RESPONSE);
   }
@@ -105,7 +105,7 @@ export default function Home() {
       <div className="grid grid-cols-2 gap-4">
         <div id="left_pane" className="grid grid-cols-1 gap-4">
           { flagLoading }
-          <FlagList flags={flags} guessedFlags={results.individualFlagResults}/>
+          <FlagList guessedFlags={results.individualFlagResults}/>
           { answerPane }
         </div>
         <div id="right_pane" className="bg-slate-800 rounded-md">
@@ -176,10 +176,9 @@ function FlagPicker({ flags, disabled, guessedFlags, gameStatus, onGuess, onRese
 }
 
 type FlagListProps = {
-  flags: FlagDefinition[]
   guessedFlags: IndividualGuessResult[]
 }
-function FlagList ( {flags, guessedFlags} : FlagListProps) {
+function FlagList ( {guessedFlags} : FlagListProps) {
   const guessedCountriesList = guessedFlags
     .map((guess, index) => {
       const distanceText = guess.distance === null ? <></> : <span className="float-right">{ guess.distance } miles</span>;
