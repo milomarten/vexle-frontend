@@ -11,3 +11,7 @@ tasks.register('buildFrontend', NpmTask) {
     dependsOn('npmInstall')
     args = ['run', 'build']
 }
+
+tasks.register('cleanFrontend', Delete) {
+    delete '.next/', 'out/', 'build/'
+}
