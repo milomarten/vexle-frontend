@@ -22,6 +22,10 @@ export default function ComparisonPane( { comparison }: ComparisonPaneProps) {
             <div className="pb-1">Patterns { comparison.foundAllPatterns ? "(All Found)" : ""}:</div>
             <div className="flex gap-4"> { computePatterns(comparison.patterns) } </div>
         </div>
+        <div>
+            <div className="pb-1">Charges { comparison.foundAllCharges ? "(All Found)" : ""}:</div>
+            <div className="flex gap-4"> { computeCharges(comparison.charges) } </div>
+        </div>
     </div>
 }
 
@@ -84,6 +88,41 @@ function computePatterns(patterns: Record<string, FlagComparisonResult>): JSX.El
         }
         for (let ctr = 0; ctr < result.absent; ctr++) {
             list.push(<Image key={pattern + "-bad-" + ctr} className={PATTERN + " outline-red-500"} src={filename} width={32} height={32} title={verbiage + " is not present"} alt={verbiage + " is not present"}></Image>)
+        }
+    }
+
+    return list;
+}
+
+const ChargeMapper: Record<string, string> = {
+    STAR: "A star (four or more points, suns don't count)",
+    SUN: "A sun (traditional star shapes don't count)",
+    MOON: "A moon (typically crescent)",
+    PLANT: "A plant (tree, flower, or leaf)",
+    ANIMAL: "An animal (non-human)",
+    EMBLEM: "An emblem (some sort of complex seal)",
+    CROSS: "A small cross",
+    TERRITORY: "A map of the territory",
+    WEAPON: "A weapon (such as a sword)",
+    ANOTHER_FLAG: "Another country's flag",
+    TEXT: "Text",
+    HUMAN: "A human",
+    BUILDING: "A building",
+    HEADGEAR: "Headgear (such as a hat or crown)"
+}
+function computeCharges(charges: Record<string, FlagComparisonResult>): JSX.Element[] {
+    const list = [];
+    for (const charge in charges) {
+        const result = charges[charge];
+        const verbiage = ChargeMapper[charge];
+        const filename = "/charges/" + charge.toLowerCase() + ".svg";
+
+        for (let ctr = 0; ctr < result.present; ctr++) {
+            const outlineColor = result.foundAll ? "outline-green-500" : "outline-amber-500"
+            list.push(<Image key={charge + "-good-" + ctr} className={PATTERN + " " + outlineColor} src={filename} width={32} height={32} title={verbiage + " is present"} alt={verbiage + " is present"}></Image>)
+        }
+        for (let ctr = 0; ctr < result.absent; ctr++) {
+            list.push(<Image key={charge + "-bad-" + ctr} className={PATTERN + " outline-red-500"} src={filename} width={32} height={32} title={verbiage + " is not present"} alt={verbiage + " is not present"}></Image>)
         }
     }
 
