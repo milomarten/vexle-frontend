@@ -5,7 +5,7 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --midground: #888888;
+  --midground: #CCCCCC;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -24,6 +24,16 @@ body {
 
 select {
   background: var(--midground);
+}
+
+.midground-pane {
+  background: var(--midground);
+}
+
+.inverted {
+	color: var(--background);
+  	background: var(--foreground);
+  	font-family: Arial, Helvetica, sans-serif;
 }
 
 .outline-solid-fixed {

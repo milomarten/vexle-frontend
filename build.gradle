@@ -12,6 +12,10 @@ tasks.register('buildFrontend', NpmTask) {
     args = ['run', 'build']
 }
 
+tasks.register('frontendDev', NpmTask) {
+    args = ['run', 'dev']
+}
+
 tasks.register('cleanFrontend', Delete) {
     delete '.next/', 'out/', 'build/'
 }

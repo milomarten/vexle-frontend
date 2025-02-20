@@ -5,12 +5,14 @@ import Image from 'next/image'
 export type ComparisonPaneProps = {
     comparison: FlagComparison
 }
+
+
 export default function ComparisonPane( { comparison }: ComparisonPaneProps) {
     return <div className="p-2 flex flex-col gap-2 m-1">
-        <div className="columns-3 gap-3">
-            <div className="outline-solid-fixed outline-2 outline-offset-2 outline-red-500 rounded-full text-center text-sm">Absent</div>
-            <div className="outline-solid-fixed outline-2 outline-offset-2 outline-amber-500 rounded-full text-center text-sm">Present, More Remain</div>
-            <div className="outline-solid-fixed outline-2 outline-offset-2 outline-green-500 rounded-full text-center text-sm">Present, All Found</div>
+        <div className="flex flex-nowrap gap-3">
+            <div className="grow outline-solid-fixed outline-2 outline-offset-2 outline-red-500 rounded-full text-center text-sm">Absent</div>
+            <div className="grow outline-solid-fixed outline-2 outline-offset-2 outline-amber-500 rounded-full text-center text-sm">Present, More Remain</div>
+            <div className="grow outline-solid-fixed outline-2 outline-offset-2 outline-green-500 rounded-full text-center text-sm">Present, All Found</div>
         </div>
         <div>
             <div className="pb-1">Colors { comparison.foundAllColors ? "(All Found)" : "" }:</div>

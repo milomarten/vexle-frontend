@@ -89,7 +89,7 @@ export default function Home() {
 
   const confetti = results.status == "WON" ? <Confetti /> : <></>;
   const comparisonPane = results.individualFlagResults.length ?
-    <ComparisonPane comparison={results.comparison}/> :
+    <ComparisonPane comparison={random()}/> :
     <div>&lt;-- Make a guess to get started!</div>
   const answerPane = results.answer ?
     <div className="rounded-md px-4 py-2 text-sm font-semibold opacity-100 bg-fuchsia-800 guess">
@@ -105,18 +105,18 @@ export default function Home() {
         <span>Yet another Flag Guessing game</span>
       </main>
   
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid md:grid-cols-2 grid-rows-7 gap-4">
         <div id="left_pane" className="grid grid-cols-1 gap-4">
           { flagLoading }
           <FlagList guessedFlags={results.individualFlagResults}/>
           { answerPane }
         </div>
-        <div id="right_pane" className="bg-slate-800 rounded-md">
+        <div id="right_pane" className="midground-pane rounded-md row-span-7">
           { comparisonPane }
         </div>
       </div>
 
-      <div className="absolute inset-x-0 bottom-0 h-20 p-4 bg-black outline-solid outline-white">
+      <div className="sticky absolute inset-x-0 bottom-0 p-4 inverted outline-solid-fixed">
         How to play: I will pick a random flag. Try to guess the flag I selected. Each time you guess, I will tell you which features
         of that flag are the same, or different, from the flag I selected.<br />Try to guess as quick as possible!
       </div>
@@ -186,7 +186,7 @@ function FlagList ( {guessedFlags} : FlagListProps) {
     .map((guess, index) => {
       const distanceText = guess.distance === null ? <></> : <span className="float-right">{ guess.distance } miles</span>;
 
-      return <div className="rounded-md px-4 py-2 text-sm font-semibold opacity-100 bg-slate-800 guess" key={guess.code}>
+      return <div className="rounded-md px-4 py-2 text-sm font-semibold opacity-100 midground-pane guess" key={guess.code}>
         <span className="mr-4">Guess {index + 1} &gt;</span>
         { guess.emoji } { guess.name }
         { distanceText }
