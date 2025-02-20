@@ -60,6 +60,9 @@ export default function Home() {
     })
     .then(data => data.json())
     .then(results => {
+      if (results.status == "WON") {
+        results.individualFlagResults.pop()
+      }
       setResults(results);
     })
     .finally(() => {
@@ -72,13 +75,13 @@ export default function Home() {
     chosenFlag.current = flags[randomIdx].code;
     setResults(DEFAULT_FLAG_RESPONSE);
   }
-  
-  const flagLoading = flags.length ? 
-    <FlagPicker 
-      flags={flags} 
-      disabled={pending} 
-      gameStatus={results.status} 
-      guessedFlags={results.individualFlagResults} 
+
+  const flagLoading = flags.length ?
+    <FlagPicker
+      flags={flags}
+      disabled={pending}
+      gameStatus={results.status}
+      guessedFlags={results.individualFlagResults}
       onGuess={guess}
       onReset={reset}
     /> :
@@ -88,9 +91,9 @@ export default function Home() {
   const comparisonPane = results.individualFlagResults.length ?
     <ComparisonPane comparison={results.comparison}/> :
     <div>&lt;-- Make a guess to get started!</div>
-  const answerPane = results.answer ? 
+  const answerPane = results.answer ?
     <div className="rounded-md px-4 py-2 text-sm font-semibold opacity-100 bg-fuchsia-800 guess">
-        Bad luck! The answer was {results.answer.emoji} {results.answer.name}
+        {results.status == "LOST" ? "Bad luck!" : "Good Job!"} The answer was {results.answer.emoji} {results.answer.name}
     </div> :
     <></>;
 
