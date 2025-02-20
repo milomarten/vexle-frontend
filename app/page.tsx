@@ -89,7 +89,7 @@ export default function Home() {
 
   const confetti = results.status == "WON" ? <Confetti /> : <></>;
   const comparisonPane = results.individualFlagResults.length ?
-    <ComparisonPane comparison={random()}/> :
+    <ComparisonPane comparison={results.comparison}/> :
     <div>&lt;-- Make a guess to get started!</div>
   const answerPane = results.answer ?
     <div className="rounded-md px-4 py-2 text-sm font-semibold opacity-100 bg-fuchsia-800 guess">
