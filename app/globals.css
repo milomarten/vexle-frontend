@@ -22,6 +22,11 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+.bodyish {
+  color: var(--foreground);
+  background: var(--background);
+}
+
 select {
   background: var(--midground);
 }

@@ -48,17 +48,23 @@ function computeColors(colors: Record<string, boolean>): JSX.Element[] {
     for (const color in colors) {
         const isPresent = colors[color];
         const colorMapping = ColorMapper[color];
-        if (isPresent) {
-            list.push(<span key={color} className={CIRCLE + " outline-green-500 " + colorMapping[0]} title={colorMapping[1] + " is present"}></span>)
-        } else {
-            list.push(<span key={color} className={ CIRCLE + " opacity-50 outline-red-500 " + colorMapping[0]} title={colorMapping[1] + " is not present"}></span>)
-        }
+        list.push(<Circle type="color" status={isPresent ? "PRESENT" : "ABSENT"}></Circle>)
     }
     return list;
 }
 
+type ColorStatus = "PRESENT" | "ABSENT";
+export function Circle({ type, status }: {type: string, status: ColorStatus}) {
+    const colorMapping = ColorMapper[type];
+    if (status == "PRESENT") {
+        return <span className={CIRCLE + " outline-green-500 " + colorMapping[0]} title={colorMapping[1] + " is present"}></span>;
+    } else {
+        return <span className={ CIRCLE + " opacity-50 outline-red-500 " + colorMapping[0]} title={colorMapping[1] + " is not present"}></span>
+    }
+}
+
 const PATTERN = "outline-solid-fixed outline-2 outline-offset-2"
-const PatternMapper: Record<string, string> = {
+export const PatternMapper: Record<string, string> = {
     FIELD: "Field",
     HORIZONTAL_STRIPE: "Horizontal Stripe",
     VERTICAL_STRIPE: "Vertical Stripe",
@@ -94,7 +100,7 @@ function computePatterns(patterns: Record<string, FlagComparisonResult>): JSX.El
     return list;
 }
 
-const ChargeMapper: Record<string, string> = {
+export const ChargeMapper: Record<string, string> = {
     STAR: "A star (four or more points, suns don't count)",
     SUN: "A sun (traditional star shapes don't count)",
     MOON: "A moon (typically crescent)",

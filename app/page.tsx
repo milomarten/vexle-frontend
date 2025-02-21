@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { DEFAULT_FLAG_RESPONSE, ERROR_FLAG_DEFINITION, FlagDefinition, FlagResponse, GameStatus, IndividualGuessResult } from "./models";
 import ComparisonPane from "./comparison-display";
 import Confetti from 'react-confetti'
+import HelpButton from "./help-button";
 
 function sortBy<T, U>(func: (arg0: T) => U): (arg0: T, arg1: T) => number {
   return (arg0: T, arg1: T) => {
@@ -98,11 +99,12 @@ export default function Home() {
     <></>;
 
   return (
-    <div className="font-[family-name:var(--font-geist-sans)] ml-4 mr-4">
+    <div id="main" className="font-[family-name:var(--font-geist-sans)] ml-4 mr-4">
       { confetti }
       <main className="grid grid-rows-auto items-center justify-items-center mb-6">
         <h1 className="text-[64px]">Vexle</h1>
         <span>Yet another Flag Guessing game</span>
+        <HelpButton />
       </main>
   
       <div className="grid md:grid-cols-2 grid-rows-7 gap-4">
@@ -114,11 +116,6 @@ export default function Home() {
         <div id="right_pane" className="midground-pane rounded-md row-span-7">
           { comparisonPane }
         </div>
-      </div>
-
-      <div className="sticky absolute inset-x-0 bottom-0 p-4 inverted outline-solid-fixed">
-        How to play: I will pick a random flag. Try to guess the flag I selected. Each time you guess, I will tell you which features
-        of that flag are the same, or different, from the flag I selected.<br />Try to guess as quick as possible!
       </div>
     </div>
   );
