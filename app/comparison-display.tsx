@@ -47,7 +47,7 @@ function computeColors(colors: Record<string, boolean>): JSX.Element[] {
     const list = [];
     for (const color in colors) {
         const isPresent = colors[color];
-        list.push(<Circle type="color" status={isPresent ? "PRESENT" : "ABSENT"}></Circle>)
+        list.push(<Circle key={color} type={color} status={isPresent ? "PRESENT" : "ABSENT"}></Circle>)
     }
     return list;
 }
@@ -58,7 +58,7 @@ export function Circle({ type, status }: {type: string, status: ColorStatus}) {
     if (status == "PRESENT") {
         return <span className={CIRCLE + " outline-green-500 " + colorMapping[0]} title={colorMapping[1] + " is present"}></span>;
     } else {
-        return <span className={ CIRCLE + " opacity-50 outline-red-500 " + colorMapping[0]} title={colorMapping[1] + " is not present"}></span>
+        return <span className={CIRCLE + " opacity-50 outline-red-500 " + colorMapping[0]} title={colorMapping[1] + " is not present"}></span>
     }
 }
 

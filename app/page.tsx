@@ -26,7 +26,7 @@ export default function Home() {
 
   useEffect(() => {
     setPending(true);
-    fetch("/api/flags")
+    fetch("http://localhost:8080/api/flags")
       .then(res => res.json())
       .then(data => {
         setFlags(data);
@@ -42,13 +42,9 @@ export default function Home() {
       })
   }, []); //Run once and only once!
 
-  useEffect(() => {
-    console.log(results);
-  }, [results])
-
   const guess = function(code: string) {
     setPending(true);
-    fetch("/api/guess", {
+    fetch("http://localhost:8080/api/guess", {
       method: "POST",
       body: JSON.stringify({
         hardCodedAnswer: chosenFlag.current,
