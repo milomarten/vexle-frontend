@@ -47,7 +47,6 @@ function computeColors(colors: Record<string, boolean>): JSX.Element[] {
     const list = [];
     for (const color in colors) {
         const isPresent = colors[color];
-        const colorMapping = ColorMapper[color];
         list.push(<Circle type="color" status={isPresent ? "PRESENT" : "ABSENT"}></Circle>)
     }
     return list;

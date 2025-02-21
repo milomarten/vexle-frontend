@@ -15,7 +15,7 @@ export default function HelpButton() {
         <p className="p-2">
             Hi! Welcome to Vexle. The object of the game is simple: I will pick a random world flag, and
             you will try to guess it. For every guess, I will tell you what parts of the flag you guessed are
-            on my flag, and which aren't. I will give information on three categories: color, patterns, and charges.
+            on my flag, and which aren&apos;t. I will give information on three categories: color, patterns, and charges.
         </p>
         <p className="p-2">
             There are eleven possible colors: Red, Orange, Yellow, Green, Light Blue, Blue, Purple, Pink, Black,
