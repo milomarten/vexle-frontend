@@ -44,3 +44,11 @@ select {
 .outline-solid-fixed {
   outline-style: solid;
 }
+
+.white, .yellow {
+  color: black;
+}
+
+.red, .orange, .green, .light_blue, .blue, .purple, .pink, .black, .gray {
+  color: white;
+}

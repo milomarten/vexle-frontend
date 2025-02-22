@@ -16,32 +16,31 @@ export default function ComparisonPane( { comparison }: ComparisonPaneProps) {
         </div>
         <div>
             <div className="pb-1">Colors { comparison.foundAllColors ? "(All Found)" : "" }:</div>
-            <div className="flex gap-4"> { computeColors(comparison.colors) } </div>
+            <div className="flex flex-wrap gap-4"> { computeColors(comparison.colors) } </div>
         </div>
         <div>
             <div className="pb-1">Patterns { comparison.foundAllPatterns ? "(All Found)" : ""}:</div>
-            <div className="flex gap-4"> { computePatterns(comparison.patterns) } </div>
+            <div className="flex flex-wrap gap-4"> { computePatterns(comparison.patterns) } </div>
         </div>
         <div>
             <div className="pb-1">Charges { comparison.foundAllCharges ? "(All Found)" : ""}:</div>
-            <div className="flex gap-4"> { computeCharges(comparison.charges) } </div>
+            <div className="flex flex-wrap gap-4"> { computeCharges(comparison.charges) } </div>
         </div>
     </div>
 }
 
-const CIRCLE = "size-8 rounded-full inline-block outline-solid-fixed outline-2 outline-offset-2"
 const ColorMapper: Record<string, string[]> = {
-    "RED": ["bg-red-800", "Red"],
-    "ORANGE": ["bg-orange-800", "Orange"],
-    "YELLOW": ["bg-yellow-800", "Yellow"],
-    "GREEN": ["bg-green-800", "Green"],
-    "LIGHT_BLUE": ["bg-cyan-800", "Light Blue"],
-    "BLUE": ["bg-blue-800", "Blue"],
-    "PURPLE": ["bg-violet-800", "Purple"],
-    "PINK": ["bg-pink-800", "Pink"],
-    "BLACK": ["bg-black", "Black"],
-    "WHITE": ["bg-white", "White"],
-    "GRAY": ["bg-slate-800", "Gray"],
+    "RED": ["bg-red-800", "Red", "RED"],
+    "ORANGE": ["bg-orange-800", "Orange", "ORA"],
+    "YELLOW": ["bg-yellow-500", "Yellow", "YEL"],
+    "GREEN": ["bg-green-800", "Green", "GRE"],
+    "LIGHT_BLUE": ["bg-cyan-500", "Light Blue", "AQU"],
+    "BLUE": ["bg-blue-800", "Blue", "BLU"],
+    "PURPLE": ["bg-violet-800", "Purple", "PUR"],
+    "PINK": ["bg-pink-500", "Pink", "PIN"],
+    "BLACK": ["bg-black", "Black", "BLA"],
+    "WHITE": ["bg-white", "White", "WHI"],
+    "GRAY": ["bg-slate-500", "Gray", "GRA"],
 }
 function computeColors(colors: Record<string, boolean>): JSX.Element[] {
     const list = [];
@@ -53,12 +52,13 @@ function computeColors(colors: Record<string, boolean>): JSX.Element[] {
 }
 
 type ColorStatus = "PRESENT" | "ABSENT";
+const CIRCLE = "rounded-full inline-block outline-solid-fixed outline-2 outline-offset-2 align-middle p-1"
 export function Circle({ type, status }: {type: string, status: ColorStatus}) {
     const colorMapping = ColorMapper[type];
     if (status == "PRESENT") {
-        return <span className={CIRCLE + " outline-green-500 " + colorMapping[0]} title={colorMapping[1] + " is present"}></span>;
+        return <span className={CIRCLE + " outline-green-500 " + colorMapping[1].toLowerCase() + " " + colorMapping[0]} title={colorMapping[1] + " is present"}>{colorMapping[2]}</span>;
     } else {
-        return <span className={CIRCLE + " opacity-50 outline-red-500 " + colorMapping[0]} title={colorMapping[1] + " is not present"}></span>
+        return <span className={CIRCLE + " opacity-50 outline-red-500 " + colorMapping[1].toLowerCase() + " " + colorMapping[0]} title={colorMapping[1] + " is not present"}>{colorMapping[2]}</span>
     }
 }
 
