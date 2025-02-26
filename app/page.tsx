@@ -103,7 +103,13 @@ export default function Home() {
         <HelpButton />
       </main>
   
-      <div className="grid md:grid-cols-2 grid-rows-7 gap-4">
+      Working on hard on making this a better game! Check back later!
+    </div>
+  );
+}
+
+/*
+<div className="grid md:grid-cols-2 grid-rows-7 gap-4">
         <div id="left_pane" className="grid grid-cols-1 gap-4">
           { flagLoading }
           <FlagList guessedFlags={results.individualFlagResults}/>
@@ -113,9 +119,7 @@ export default function Home() {
           { comparisonPane }
         </div>
       </div>
-    </div>
-  );
-}
+*/
 
 const BUTTON_TEXT: Record<GameStatus, string> = {
   PLAYING: "Guess!",
