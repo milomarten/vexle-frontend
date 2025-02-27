@@ -1,7 +1,7 @@
 "use client"; // This is a client component 👈🏽
 
 import { useEffect, useRef, useState } from "react";
-import { DEFAULT_FLAG_RESPONSE, ERROR_FLAG_DEFINITION, FlagColorOptions, FlagDefinition, FlagResponse, GameStatus, IndividualGuessResult } from "./models";
+import { DEFAULT_FLAG_RESPONSE, ERROR_FLAG_DEFINITION, FlagDefinition, FlagResponse, GameStatus, IndividualGuessResult } from "./models";
 import Confetti from 'react-confetti'
 import { ColorHelpButton, HelpButton } from "./help-button";
 import { getFlags, makeGuess } from "./backend";

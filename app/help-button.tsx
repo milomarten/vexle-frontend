@@ -1,7 +1,6 @@
 import { Button, Dialog, DialogBody } from "@material-tailwind/react";
 import { useState } from "react";
 import { FlagColorOptions } from "./models";
-import { cp } from "fs";
 import { ColorDot } from "./iconography";
 
 export function HelpButton() {
@@ -29,12 +28,12 @@ export function HelpButton() {
                 on my flag, and which aren&apos;t. I will give information on three categories: color, patterns, and charges.
             </p>
             <p className="p-2">
-                I will give information on three categories: color, patterns, and charges. After each guess, I'll show you all the
+                I will give information on three categories: color, patterns, and charges. After each guess, I&apos;ll show you all the
                 features of that flag, and mark if that feature is present, or not present, in the flag. You can then use that
                 clue for your next guess!
             </p>
             <p className="p-2">
-                If you're unfamiliar with some of the terms on this site, check out the Color List!
+                If you&apos;re unfamiliar with some of the terms on this site, check out the Color List!
             </p>
         </DialogBody>
     </Dialog>
@@ -45,10 +44,10 @@ export function ColorHelpButton() {
     const [isOpen, setOpen] = useState(false);
 
     const colorList = FlagColorOptions
-        .map(color => <ColorDot color={color}/>);
+        .map(color => <ColorDot key={color + "-normal"} color={color}/>);
     
     const colorListBad = FlagColorOptions
-        .map(color => <ColorDot color={color} present="ABSENT"/>);
+        .map(color => <ColorDot key={color + "-absent"} color={color} present="ABSENT"/>);
 
     return <>
         <Button color="light-green" onClick={() => setOpen(true)}>Color List</Button>

@@ -7,15 +7,7 @@ export const ERROR_FLAG_DEFINITION: FlagDefinition = {
 export const DEFAULT_FLAG_RESPONSE: FlagResponse = {
     individualFlagResults: [],
     status: "PLAYING",
-    comparison: {
-        colors: {},
-        foundAllColors: false,
-        patterns: {},
-        foundAllPatterns: false,
-        charges: {},
-        foundAllCharges: false,
-        foundAll: false
-    },
+    // comparison: {},
     answer: undefined
 }
 
@@ -33,7 +25,7 @@ export interface FlagRequest {
 
 export interface FlagResponse {
     individualFlagResults: IndividualGuessResult[],
-    comparison: any,
+    // comparison: any,
     status: GameStatus,
     answer: FlagDefinition | null | undefined;
 }

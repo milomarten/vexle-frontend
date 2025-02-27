@@ -1,8 +1,7 @@
 import { Chip } from "@material-tailwind/react"
 import { FlagColor, PresentAbsent } from "./models"
-import { color, variant } from "@material-tailwind/react/types/components/alert"
+import { color } from "@material-tailwind/react/types/components/alert"
 
-const CIRCLE = "rounded-full inline-block align-middle p-1 text-sm"
 type CircleMapping = {
     color?: color,
     variant?: string,

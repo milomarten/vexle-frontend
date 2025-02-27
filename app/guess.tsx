@@ -8,7 +8,7 @@ export type FlagLineParams = {
 export function FlagLine({ number, result }: FlagLineParams) {
     const colors = Object.entries(result.colors)
         .map(item => {
-            return <ColorDot color={item[0] as FlagColor} present={item[1] ? "PRESENT" : "ABSENT"} />
+            return <ColorDot key={item[0]} color={item[0] as FlagColor} present={item[1] ? "PRESENT" : "ABSENT"} />
         });
 
     return <div className="rounded-md px-4 py-2 text-sm font-semibold opacity-100 midground-pane guess">
