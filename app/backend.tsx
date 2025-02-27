@@ -35,57 +35,6 @@ export async function makeGuess(request: FlagRequest): Promise<FlagResponse> {
 }
 
 const LOCAL_RESPONSE: FlagResponse = {
-    "comparison": {
-        "colors": {
-            "RED": "PRESENT",
-            "ORANGE": "NOT_GUESSED",
-            "YELLOW": "ABSENT",
-            "GREEN": "PRESENT",
-            "LIGHT_BLUE": "NOT_GUESSED",
-            "BLUE": "NOT_GUESSED",
-            "PURPLE": "NOT_GUESSED",
-            "PINK": "NOT_GUESSED",
-            "BLACK": "PRESENT",
-            "WHITE": "PRESENT",
-            "GRAY": "NOT_GUESSED"
-        },
-        "charges": {
-            "STAR": "X",
-            "SUN": "??",
-            "MOON": "??",
-            "PLANT": "X",
-            "ANIMAL": "??",
-            "EMBLEM": "??",
-            "CROSS": "??",
-            "TERRITORY": "??",
-            "WEAPON": "??",
-            "ANOTHER_FLAG": "??",
-            "TEXT": "??",
-            "HUMAN": "??",
-            "BUILDING": "??",
-            "HEADGEAR": "??"
-        },
-        "patterns": {
-            "FIELD": "X",
-            "HORIZONTAL_STRIPE": "3",
-            "VERTICAL_STRIPE": "X",
-            "DIAGONAL_STRIPE": "??",
-            "CROSS": "??",
-            "DIAGONAL_CROSS": "??",
-            "GRID": "??",
-            "DIAGONAL_GRID": "??",
-            "CANTON": "??",
-            "BORDER": "??",
-            "TRIANGLE": "??",
-            "ORNAMENT": "??",
-            "CIRCLE": "??",
-            "DIAMOND": "??",
-            "CHEVRON": "??"
-        },
-        "allColorsFound": true,
-        "allChargesFound": true,
-        "allPatternsFound": true
-    },
     "individualFlagResults": [
         {
             "code": "HK",
