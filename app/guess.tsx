@@ -1,5 +1,5 @@
 import { ColorDot, IconDot } from "./iconography";
-import { FlagCharges, FlagColor, FlagPattern, FlagResponse, GameStatus, IndividualGuessResult } from "./models"
+import { FlagCharges, FlagColor, FlagPattern, GameStatus, IndividualGuessResult } from "./models"
 
 export type FlagLineParams = {
     number: number,
@@ -13,15 +13,15 @@ export function FlagLine({ number, result, type }: FlagLineParams) {
         });
     const patterns = Object.entries(result.patterns)
         .map(item => {
-            var key = item[0];
-            var value = item[1];
-            return <IconDot type="pattern" value={key as FlagPattern} count={value} />;
+            const key = item[0];
+            const value = item[1];
+            return <IconDot key={key} type="pattern" value={key as FlagPattern} count={value} />;
         });
     const charges = Object.entries(result.charges)
         .flatMap(item => {
-            var key = item[0];
-            var value = item[1];
-            return <IconDot type="charge" value={key as FlagCharges} count={value} />;
+            const key = item[0];
+            const value = item[1];
+            return <IconDot key={key} type="charge" value={key as FlagCharges} count={value} />;
         });
 
     const className = `rounded-md px-4 py-2 text-sm font-semibold opacity-100 ${type ? 'fuchsia answer' : 'midground-pane guess'}`

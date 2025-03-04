@@ -222,12 +222,12 @@ export function ChargeHelpButton() {
                 Since Emblems are typically quite complex, Emblems specifically may count as other Charges too. For
                 example, take the flag of Mexico (🇲🇽). Its emblem prominently contains a bird, and as such, Mexico
                 is considered to have an Animal on its flag. Note that this is only for prominent features; typically,
-                anything that can be seen clearly on the flag's emoji. I may deprecate this behavior, so don't rely on it.
+                anything that can be seen clearly on the flag&apos;s emoji. I may deprecate this behavior, so don&apos;t rely on it.
             </div>
             <div className="p-2">
                 Other Flags are also a special case. The colors, patterns, and charges on an Other Flag are not included
-                in the flag's list of colors, patterns, and charges. For example, the flag of Bermuda (🇧🇲) is considered
-                only as red, with a field, a canton, another flag, and an emblem. This is because including the "sub-flag"&apos;s
+                in the flag&apos;s list of colors, patterns, and charges. For example, the flag of Bermuda (🇧🇲) is considered
+                only as red, with a field, a canton, another flag, and an emblem. This is because including the &quot;sub-flag&quot;&apos;s
                 features can be cluttering, and particularly dilutes the usefulness of Red, White, and Blue colors (since most
                 sub-flag&apos;s are either the UK or France).
             </div>

@@ -1,5 +1,5 @@
 import { Chip } from "@material-tailwind/react"
-import { FlagCharges, FlagColor, FlagComparisonResult, FlagPattern, MultiPresentAbsent, PresentAbsent } from "./models"
+import { FlagCharges, FlagColor, FlagComparisonResult, FlagPattern, PresentAbsent } from "./models"
 import { color } from "@material-tailwind/react/types/components/alert"
 
 type CircleMapping = {
@@ -82,7 +82,7 @@ export function IconDot(params: ChargeMappingParameters | PatternMappingParamete
     const color = colorForPresent(params.count);
     const value = params.type == "charge" ? ChargeMapper[params.value] : PatternMapper[params.value];
 
-    return <Chip size="sm" value={textForPresent(params.count, value)} color={color} icon={<img src={url} width={32} height={32} />}/>
+    return <Chip size="sm" value={textForPresent(params.count, value)} color={color} icon={<img src={url} alt="" width={32} height={32} />}/>
 }
 
 function colorForPresent(result: FlagComparisonResult | undefined): color {
