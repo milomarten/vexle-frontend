@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { DEFAULT_FLAG_RESPONSE, ERROR_FLAG_DEFINITION, FlagDefinition, FlagResponse, GameStatus, IndividualGuessResult } from "./models";
 import Confetti from 'react-confetti'
-import { ColorHelpButton, HelpButton } from "./help-button";
+import { ChargeHelpButton, ColorHelpButton, HelpButton, PatternHelpButton } from "./help-button";
 import { getFlags, makeGuess } from "./backend";
 import { Button } from "@material-tailwind/react";
 import { FlagLine } from "./guess";
@@ -80,10 +80,11 @@ export default function Home() {
 
   const confetti = results.status == "WON" ? <Confetti /> : <></>;
   const answerPane = results.answer ?
-    <div className="rounded-md px-4 py-2 text-sm font-semibold opacity-100 bg-fuchsia-800 guess">
-        {results.status == "LOST" ? "Bad luck!" : "Good Job!"} The answer was {results.answer.emoji} {results.answer.name}
-    </div> :
-    <></>;
+    <FlagLine 
+      number={results.individualFlagResults.length+1} 
+      result={{...results.answer, patterns: {}, charges: {}, colors: {}, distance: undefined}} 
+      type={results.status}/> :
+    <></>
 
   return (
     <div id="main" className="font-[family-name:var(--font-geist-sans)] ml-4 mr-4">
@@ -94,6 +95,8 @@ export default function Home() {
         <div className="flex gap-2">
             <HelpButton />
             <ColorHelpButton />
+            <PatternHelpButton />
+            <ChargeHelpButton />
         </div>
       </main>
   

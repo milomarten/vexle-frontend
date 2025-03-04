@@ -27,6 +27,10 @@ select {
   background: var(--midground);
 }
 
+.fuchsia {
+  background: fuchsia;
+}
+
 .inverted {
 	color: var(--background);
   	background: var(--foreground);
