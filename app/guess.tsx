@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ColorDot, IconDot } from "./iconography";
-import { DEFAULT_FLAG_RESPONSE, FlagCharges, FlagColor, FlagDefinition, FlagPattern, FlagResponse, GameStatus, IndividualGuessResult } from "./models"
+import { DEFAULT_FLAG_RESPONSE, FlagCharges, FlagColor, FlagDefinition, FlagPattern, FlagRequest, FlagResponse, GameStatus, IndividualGuessResult } from "./models"
 import { Button } from "@material-tailwind/react";
 import { makeGuess } from "./backend";
 import toast from "react-hot-toast";
+import flagleSession from "./session";
 
 export type FlagLineParams = {
     number: number,
@@ -138,13 +139,28 @@ export function Flagle({flags, today, answer, onReset, onWin}: FlagleParams) {
     const [results, setResults] = useState<FlagResponse>(DEFAULT_FLAG_RESPONSE);
     const [pending, setPending] = useState(false);
 
+    useEffect(() => {
+        if (flagleSession.hasPreviousSelections()) {
+            setPending(true);
+            flagleSession.getSelections()
+                .then(r =>{
+                    if (r) { setResults(r); }
+                })
+                .finally(() => setPending(false));
+        }
+    }, []) // Run just once at startup
+
     const guess = function(code: string) {
         setPending(true);
-        makeGuess({
-          hardCodedAnswer: answer,
-          date: today,
-          guesses: [...results.individualFlagResults.map(i => i.code), code]
-        })
+        const guess: FlagRequest = {
+            hardCodedAnswer: answer,
+            date: today,
+            guesses: [...results.individualFlagResults.map(i => i.code), code]
+          };
+
+          flagleSession.saveSelections(guess);
+
+        makeGuess(guess)
         .then(results => {
           if (results.status == "WON") {
             results.individualFlagResults.pop();
@@ -162,6 +178,7 @@ export function Flagle({flags, today, answer, onReset, onWin}: FlagleParams) {
 
     const reset = function() {
         setResults(DEFAULT_FLAG_RESPONSE);
+        flagleSession.clearSelections();
         onReset();
     }
 

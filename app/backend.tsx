@@ -1,6 +1,6 @@
 import { FlagDefinition, FlagRequest, FlagResponse } from "./models";
 
-const LOCAL = false;
+const LOCAL = true;
 
 export async function getFlags(): Promise<FlagDefinition[]> {
     if (LOCAL) {
