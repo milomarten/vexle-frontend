@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ColorDot, IconDot } from "./iconography";
 import { DEFAULT_FLAG_RESPONSE, FlagCharges, FlagColor, FlagDefinition, FlagPattern, FlagRequest, FlagResponse, GameStatus, IndividualGuessResult } from "./models"
 import { Button } from "@material-tailwind/react";
@@ -139,16 +139,16 @@ export function Flagle({flags, today, answer, onReset, onWin}: FlagleParams) {
     const [results, setResults] = useState<FlagResponse>(DEFAULT_FLAG_RESPONSE);
     const [pending, setPending] = useState(false);
 
-    useEffect(() => {
-        if (flagleSession.hasPreviousSelections()) {
-            setPending(true);
-            flagleSession.getSelections()
-                .then(r =>{
-                    if (r) { setResults(r); }
-                })
-                .finally(() => setPending(false));
-        }
-    }, []) // Run just once at startup
+    // useEffect(() => {
+    //     if (flagleSession.hasPreviousSelections()) {
+    //         setPending(true);
+    //         flagleSession.getSelections()
+    //             .then(r =>{
+    //                 if (r) { setResults(r); }
+    //             })
+    //             .finally(() => setPending(false));
+    //     }
+    // }, []) // Run just once at startup
 
     const guess = function(code: string) {
         setPending(true);
