@@ -1,9 +1,3 @@
-export const ERROR_FLAG_DEFINITION: FlagDefinition = {
-    code: "XX",
-    name: "Unable to Load",
-    emoji: ""
-}
-
 export const DEFAULT_FLAG_RESPONSE: FlagResponse = {
     individualFlagResults: [],
     status: "PLAYING",

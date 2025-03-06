@@ -117,12 +117,8 @@ const LOCAL_RESPONSE: FlagResponse = {
             }
         }
     ],
-    "status": "WON",
-    "answer": {
-        "code": "KW",
-        "name": "Kuwait",
-        "emoji": "🇰🇼"
-    }
+    "status": "PLAYING",
+    answer: undefined
 }
 
 const LOCAL_FLAGS: FlagDefinition[] = [
