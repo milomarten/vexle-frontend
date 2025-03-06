@@ -3,15 +3,17 @@ import { FlagRequest, FlagResponse } from "./models";
 
 const SELECTIONS_KEY = "SELECTIONS";
 
-export default {
+const flagleSession = {
     hasPreviousSelections,
     getSelections,
     clearSelections,
     saveSelections
 };
 
+export default flagleSession;
+
 function hasPreviousSelections(): boolean {
-    var session = sessionStorage.getItem(SELECTIONS_KEY);
+    const session = sessionStorage.getItem(SELECTIONS_KEY);
     if (session) {
         const rawJson = JSON.parse(session);
         return isValidFlagRequest(rawJson);
@@ -20,7 +22,7 @@ function hasPreviousSelections(): boolean {
 }
 
 async function getSelections(): Promise<FlagResponse | undefined> {
-    var session = sessionStorage.getItem(SELECTIONS_KEY);
+    const session = sessionStorage.getItem(SELECTIONS_KEY);
     if (session) {
         const rawJson = JSON.parse(session);
         if (isValidFlagRequest(rawJson)) {
@@ -41,6 +43,7 @@ function saveSelections(selections: FlagRequest) {
     sessionStorage.setItem(SELECTIONS_KEY, JSON.stringify(selections));
 }
 
-function isValidFlagRequest(obj: any): boolean {
-    return 'guesses' in obj && 'date' in obj && 'hardCodedAnswer' in obj
+function isValidFlagRequest(obj: unknown): boolean {
+    const lookup = Object(obj);
+    return 'guesses' in lookup && 'date' in lookup && 'hardCodedAnswer' in lookup
 }
